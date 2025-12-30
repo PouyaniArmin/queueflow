@@ -3,7 +3,8 @@
         "psr-4": {
             "App\\":"app/",
             "Controllres\\":"controllers/",
-            "Models\\":"models/"
+            "Models\\":"models/",
+            "Exceptions\\":"exceptions/"
         }
     },
     "require": {
