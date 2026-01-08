@@ -92,7 +92,8 @@ class Request
         return $headers['DNT'] ?? null;
     }
 
-    public function getHeader(string $name):?string{
+    public function getHeader(string $name): ?string
+    {
         $headers = getallheaders();
         $name = str_replace(' ', '-', ucwords(str_replace('-', ' ', strtolower($name))));
         return $headers[$name] ?? null;
@@ -105,9 +106,92 @@ class Request
     public function getBearerToken(): ?string
     {
         $auth = $this->getHeader('Authorization');
-        if ($auth===null || !str_starts_with($auth,'Bearer ')) {
+        if ($auth === null || !str_starts_with($auth, 'Bearer ')) {
             return null;
         }
         return trim(substr($auth, 7));
+    }
+    public function isGET(): bool
+    {
+        return $this->method() === 'get';
+    }
+
+    public function isPost(): bool
+    {
+        return $this->method() === 'post';
+    }
+    public function all(): ?array
+    {
+        $data = [];
+        if ($this->method() === 'get') {
+            foreach ($_GET as $key => $value) {
+                $data[$key] = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            }
+        }
+
+        if ($this->method() === 'post') {
+            foreach ($_POST as $key => $value) {
+                $data[$key] = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            }
+        }
+        if ($this->isJson()) {
+            $raw = file_get_contents('php://input');
+            $json = json_decode($raw, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($json)) {
+                foreach ($json as $key => $value)
+                    $data[$key] = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            }
+        }
+        return $data;
+    }
+    public function get(string $key)
+    {
+        $data = $this->all();
+        if (array_key_exists($key, $data)) {
+            return $data[$key];
+        }
+        return null;
+    }
+    public function allFiles(): ?array
+    {
+        $files = [];
+
+        $processFiles = function () use (&$files) {
+            if (empty($_FILES)) {
+                return;
+            }
+
+            foreach ($_FILES as $key => $value) {
+                if (is_array($value['error'])) {
+                    if ($value['error'][0] === UPLOAD_ERR_OK) {
+                        $files[$key] = $value;
+                    }
+                } else {
+                    if ($value['error'] === UPLOAD_ERR_OK) {
+                        $files[$key] = $value;
+                    }
+                }
+            }
+        };
+
+        $processFiles();
+
+        return $files;
+    }
+    public function file(string $key): ?array
+    {
+        if (!isset($_FILES[$key])) {
+            return null;
+        }
+
+        if ($_FILES[$key]['error'] !== UPLOAD_ERR_OK) {
+            return null;
+        }
+
+        return $_FILES[$key];
+    }
+    public function hasFile(string $key): bool
+    {
+        return isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK;
     }
 }
