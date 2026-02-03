@@ -1,5 +1,5 @@
 <?php
-namespace Controllres;
+namespace Controllers;
 
 use App\Controller;
 use App\Request;

@@ -3,8 +3,7 @@
 use App\Application;
 use App\Request;
 use App\Router;
-use Controllres\HomeController;
-use Controllres\HomeCotnteoller;
+use Controllers\HomeController;
 
 require_once __DIR__."/../vendor/autoload.php";
 
