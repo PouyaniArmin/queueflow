@@ -5,6 +5,7 @@ use App\Request;
 use App\Router;
 use Controllres\HomeController;
 use Controllres\HomeCotnteoller;
+use Models\Database;
 
 require_once __DIR__."/../vendor/autoload.php";
 
