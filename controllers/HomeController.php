@@ -1,9 +1,8 @@
 <?php
-namespace Controllers;
+namespace Controllres;
 
 use App\Controller;
 use App\Request;
-use App\View;
 
 class HomeController extends Controller{
     public function index(Request $request){
