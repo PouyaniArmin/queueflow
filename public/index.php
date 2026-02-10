@@ -3,11 +3,14 @@
 use App\Application;
 use App\Request;
 use App\Router;
-use Controllers\HomeController;
+use Config\Env;
+use Controllres\HomeController;
 
 require_once __DIR__."/../vendor/autoload.php";
 
 $app=new Application(new Router(new Request));
+Env::getInstance();
+Env::load(dirname(__DIR__));
 $app->router->get('/',[HomeController::class,'index']);
 $app->router->get('/post/{id}',[HomeController::class,'test']);
 $app->router->get('/about/{id}',[HomeController::class,'new']);
