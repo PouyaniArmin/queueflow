@@ -4,7 +4,8 @@
             "App\\":"app/",
             "Controllres\\":"controllers/",
             "Models\\":"models/",
-            "Exceptions\\":"exceptions/"
+            "Exceptions\\":"exceptions/",
+            "Config\\":"config"
         }
     },
     "require": {

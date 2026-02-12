@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Dotenv\Util\Str;
 use Exception;
 use Exceptions\RouteNotFoundException;
 

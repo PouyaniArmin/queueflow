@@ -2,13 +2,10 @@
 
 namespace App;
 
-use Exception;
 use Exceptions\BadRequestException;
 use Exceptions\InternalServerErrorException;
 use Exceptions\RouteNotFoundException;
 use ReflectionClass;
-
-use function PHPUnit\Framework\throwException;
 
 class Router
 {
