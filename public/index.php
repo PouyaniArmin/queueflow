@@ -14,6 +14,7 @@ $app=new Application(new Router(new Request));
 Env::getInstance();
 Env::load(dirname(__DIR__));
 Database::getInstance();
+Database::ensureDefaultTables();
 $app->router->get('/',[HomeController::class,'index']);
 $app->router->get('/post/{id}',[HomeController::class,'test']);
 $app->router->get('/about/{id}',[HomeController::class,'new']);

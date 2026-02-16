@@ -52,4 +52,113 @@ class Database
         }
         return self::$conn;
     }
+
+    public static function ensureDefaultTables()
+    {
+        self::connection();
+        if (self::$conn === null) {
+            throw new Exception("Database connection not initialized. Call Database::connection() first.");
+        }
+        self::users();
+        self::roles();
+        self::users_roles();
+        self::businesses();
+        self::services();
+        self::appointments();
+    }
+    private static function users()
+    {
+        $query = "CREATE TABLE IF NOT EXISTS users (
+            id          SERIAL          PRIMARY KEY,
+            name        VARCHAR(100)    NOT NULL,
+            email       VARCHAR(255)    UNIQUE NOT NULL,
+            password    VARCHAR(255)    NOT NULL,
+            business_id INTEGER         DEFAULT NULL,
+            created_at  TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            updated_at  TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP);";
+        self::$conn->exec($query);
+    }
+
+    private static function roles()
+    {
+        $query = "CREATE TABLE IF NOT EXISTS roles(
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(50),
+            description TEXT,
+            created_at  TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            updated_at  TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP);";
+        self::$conn->exec($query);
+    }
+    private static function users_roles()
+    {
+        $query = "CREATE TABLE IF NOT EXISTS users_roles(
+            user_id INTEGER NOT NULL,
+            role_id INTEGER NOT NULL,
+            created_at  TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (user_id, role_id),
+            CONSTRAINT fk_users_roles FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+            CONSTRAINT fk_users_roles_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE);";
+        self::$conn->exec($query);
+    }
+
+    private static function businesses()
+    {
+        $query = "CREATE TABLE IF NOT EXISTS businesses (
+            id              SERIAL                  PRIMARY KEY,
+            name            VARCHAR(150)            NOT NULL,
+            slug            VARCHAR(100)            UNIQUE NOT NULL,
+            address         TEXT,
+            phone           VARCHAR(20),
+            is_active       BOOLEAN                 DEFAULT TRUE,
+            created_at      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            updated_at      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP);";
+        self::$conn->exec($query);
+    }
+
+    private static function services()
+    {
+        $query = "CREATE TABLE IF NOT EXISTS services (
+            id               SERIAL                  PRIMARY KEY,
+            business_id      INTEGER                 NOT NULL,
+            name             VARCHAR(150)            NOT NULL,
+            duration_minutes INTEGER                 NOT NULL CHECK (duration_minutes > 0),
+            price            DECIMAL(10, 2)          DEFAULT 0.00,
+            is_active        BOOLEAN                 DEFAULT TRUE,
+            created_at       TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            updated_at       TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
+            CONSTRAINT fk_services_business
+                FOREIGN KEY (business_id)
+                REFERENCES businesses(id)
+                ON DELETE CASCADE);";
+        self::$conn->exec($query);
+    }
+
+    private static function appointments()
+    {
+        $query = "CREATE TABLE IF NOT EXISTS appointments (
+            id              SERIAL                  PRIMARY KEY,
+            business_id     INTEGER                 NOT NULL,
+            service_id      INTEGER                 NOT NULL,
+            customer_name   VARCHAR(100)            NOT NULL,
+            customer_phone  VARCHAR(20)             NOT NULL,
+            date_time       TIMESTAMP WITH TIME ZONE NOT NULL,
+            status          VARCHAR(20)             NOT NULL 
+                            CHECK (status IN ('pending', 'confirmed', 'cancelled', 'completed')) 
+                            DEFAULT 'pending',
+            notes           TEXT,
+            created_at      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            updated_at      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        
+            CONSTRAINT fk_appointments_business
+                FOREIGN KEY (business_id)
+                REFERENCES businesses(id)
+                ON DELETE CASCADE,
+        
+            CONSTRAINT fk_appointments_service
+                FOREIGN KEY (service_id)
+                REFERENCES services(id)
+                ON DELETE RESTRICT);";
+        self::$conn->exec($query);
+    }
 }
