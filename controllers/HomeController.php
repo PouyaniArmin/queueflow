@@ -3,7 +3,7 @@ namespace Controllres;
 
 use App\Controller;
 use App\Request;
-use Models\Database;
+
 
 class HomeController extends Controller{
     public function index(Request $request){
