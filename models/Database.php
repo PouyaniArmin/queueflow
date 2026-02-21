@@ -88,6 +88,37 @@ class Database
             created_at  TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
             updated_at  TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP);";
         self::$conn->exec($query);
+        self::defaultRoles();
+    }
+    private static function defaultRoles()
+    {
+        $params = [
+            [
+                'name' => 'customer',
+                'description' => 'Client who books and manages appointments'
+            ],
+            [
+                'name' => 'business_owner',
+                'description' => 'Business owner or manager who controls services, schedules, and bookings'
+            ],
+            [
+                'name' => 'admin',
+                'description' => 'System administrator with full access privileges'
+            ]
+        ];
+        $query = "SELECT COUNT(*) FROM roles";
+        $stmt = self::$conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchColumn();
+        if ($result <= 0) {
+            $sql = "INSERT INTO roles (name,description) VALUES (:name,:description)";
+            $stmt = self::$conn->prepare($sql);
+            foreach ($params as $role) {
+                $stmt->bindValue(":name", $role['name'], PDO::PARAM_STR);
+                $stmt->bindValue(":description", $role['description'], PDO::PARAM_STR);
+                $stmt->execute();
+            }
+        }
     }
     private static function users_roles()
     {
