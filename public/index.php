@@ -4,8 +4,8 @@ use App\Application;
 use App\Request;
 use App\Router;
 use Config\Env;
-use Controllres\HomeController;
-use Controllres\HomeCotnteoller;
+use Controllers\AuthController;
+use Controllers\HomeController;
 use Models\Database;
 
 require_once __DIR__."/../vendor/autoload.php";
@@ -23,4 +23,7 @@ $app->router->get('/home',['test']);
 $app->router->get('/test',function(){
     return "Test";
 });
+// auth
+$app->router->get('/login',[AuthController::class,'index']);
+$app->router->get('/register',[AuthController::class,'register']);
 $app->run();
