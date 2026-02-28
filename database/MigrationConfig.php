@@ -12,10 +12,10 @@ class MigrationConfig
     {
         return [
             'users'               => "migrations/001-create-users.sql",
-            'businesses'          => "migrations/002-create-businesses.sql",
-            'business_ownerships' => "migrations/003-create-business_ownerships.sql",
-            'services'            => "migrations/004-create-services.sql",
-            'appointments'        => "migrations/005-create-appointments.sql",
+            'businesses'          => "migrations/001-create-businesses.sql",
+            'business_ownerships' => "migrations/001-create-business_ownerships.sql",
+            'services'            => "migrations/001-create-services.sql",
+            'appointments'        => "migrations/001-create-appointments.sql",
         ];
     }
     public static function tables(): array
