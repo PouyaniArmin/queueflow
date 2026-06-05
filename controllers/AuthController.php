@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use App\Controller;
+use App\Request;
 
 class AuthController extends Controller{
     public function index(){
