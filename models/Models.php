@@ -1,5 +1,4 @@
 <?php
-
 namespace Models;
 
 use App\QueryBuilder;

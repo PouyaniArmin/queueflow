@@ -26,4 +26,5 @@ $app->router->get('/test',function(){
 // auth
 $app->router->get('/login',[AuthController::class,'index']);
 $app->router->get('/register',[AuthController::class,'register']);
+$app->router->post('/register',[AuthController::class,'registerUser']);
 $app->run();
