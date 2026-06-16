@@ -10,7 +10,7 @@ use Models\Database;
 
 require_once __DIR__."/../vendor/autoload.php";
 
-$app=new Application(new Router(new Request));
+$app=new Application(dirname(__DIR__),new Router(new Request));
 Env::getInstance();
 Env::load(dirname(__DIR__));
 Database::getInstance();
@@ -25,6 +25,7 @@ $app->router->get('/test',function(){
 });
 // auth
 $app->router->get('/login',[AuthController::class,'index']);
+$app->router->post('/login',[AuthController::class,'login']);
 $app->router->get('/register',[AuthController::class,'register']);
 $app->router->post('/register',[AuthController::class,'registerUser']);
 $app->run();

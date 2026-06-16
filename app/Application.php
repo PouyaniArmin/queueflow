@@ -9,8 +9,12 @@ use Exceptions\RouteNotFoundException;
 class Application
 {
   public Router $router;
-  public function __construct(Router $router)
+  public ?Application $app=null;
+  public static ?string $rootPath=null;
+  public function __construct(string $rootPath,Router $router)
   {
+    $this->app=$this;
+    self::$rootPath=$rootPath;
     $this->router = $router;
   }
   public function run()
