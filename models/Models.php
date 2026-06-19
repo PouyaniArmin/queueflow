@@ -1,9 +1,11 @@
 <?php
+
 namespace Models;
 
 use App\QueryBuilder;
 use Exception;
 use PDO;
+use RequestParseBodyException;
 
 abstract class Models extends QueryBuilder
 {
@@ -40,6 +42,19 @@ abstract class Models extends QueryBuilder
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function selectFindOneBy(string $key,string|int $valeu)
+    {
+        $query = $this->queryFindOneBY($key);
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(":$key", $valeu, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (!$result) {
+            return false;
+        }
         return $result;
     }
     public function update(array $data, $id)

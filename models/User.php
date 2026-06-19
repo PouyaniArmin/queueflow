@@ -12,4 +12,9 @@ class User extends Models
         'phone',
         'role_id',
     ];
+
+    public function findByEmail(string|int $value)
+    {
+        return $this->selectFindOneBy('email', $value);
+    }
 }

@@ -20,27 +20,36 @@ class QueryBuilder
                     VALUES ({$this->placeholder()})";
         return $query;
     }
-    protected function querySelectAll():string{
-        $query="SELECT * FROM {$this->table}";
+    protected function querySelectAll(): string
+    {
+        $query = "SELECT * FROM {$this->table}";
         return $query;
     }
-    protected function queryUpdate(array $data):string{
-        $keys=$this->columnListUpdate($data);
-        $query="UPDATE {$this->table} SET {$keys} WHERE id=:id";
+    protected function queryFindOneBY(string $param)
+    {
+        $query = "SELECT * FROM {$this->table} WHERE $param=:$param";
+        return $query;
+    }
+    protected function queryUpdate(array $data): string
+    {
+        $keys = $this->columnListUpdate($data);
+        $query = "UPDATE {$this->table} SET {$keys} WHERE id=:id";
         return $query;
     }
 
-    protected function queryDelete():string{
-        $query="DELETE FROM {$this->table} WHERE id=:id";
+    protected function queryDelete(): string
+    {
+        $query = "DELETE FROM {$this->table} WHERE id=:id";
         return $query;
     }
-    private function columnListUpdate(array $data){
-        $keys=array_keys($data);
-        $result='';
-        foreach($keys as $col){
-            $result.=$col."=:".$col.',';
+    private function columnListUpdate(array $data)
+    {
+        $keys = array_keys($data);
+        $result = '';
+        foreach ($keys as $col) {
+            $result .= $col . "=:" . $col . ',';
         }
-        return substr($result,0,-1);
+        return substr($result, 0, -1);
     }
     private function columnList(): string
     {

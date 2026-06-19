@@ -5,6 +5,7 @@ namespace Controllers;
 use App\Controller;
 use App\Request;
 use Models\User;
+use Services\AuthService;
 
 class AuthController extends Controller
 {
@@ -17,25 +18,15 @@ class AuthController extends Controller
         return $this->view('register');
     }
     public function login(Request $request) {
-        var_dump($request->all());
-        return "Login";
+       $request=$request->all();
+        $auth=new AuthService();
+        return $auth->authenticate($request['email'],$request['password']);
+        
     }
     public function registerUser(Request $request)
     {
-        $request = $request->all();
-        $user = new User;
-        $countrCode = $request['country_code'];
-        $pohne = $request['phone'];
-        $fullPhoneNumber = $countrCode . $pohne;
-        $data = [
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password_hash' => $request['password'],
-            'phone' => $fullPhoneNumber,
-            'role_id' => 1
-        ];
-        var_dump($data);
-        $user->insert($data);
-        return "insert To database";
+        $auth=new AuthService;
+        return $auth->signup($request);
+    
     }
 }
