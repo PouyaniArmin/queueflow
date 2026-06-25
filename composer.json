@@ -7,7 +7,8 @@
             "Exceptions\\":"exceptions/",
             "Config\\":"config",
             "Database\\":"database/",
-            "Services\\":"services",
+            "Services\\":"services/",
+            "Middleware\\":"middleware/",
             "Database\\Migrations\\":"database/migrations/"
         }
     },
