@@ -12,7 +12,7 @@ class AuthMiddleware extends Middleware
     public function handle(Request $request, $next)
     {
         if (!isset($_SESSION['user'])) {
-            throw new Exception("Unauthorized", 401);
+            header("Location:/login");
         }
         return $next($request);
     }
