@@ -29,60 +29,70 @@ class Router
     }
     public function resolve()
     {
-        $path = $this->request->url();
-        $method = strtolower($this->request->method());
-        $callback = null;
-        $matches = [];
-        foreach ($this->routes[$method] as $routePath => $routCallback) {
-            $pattern = preg_replace('#\{[^}]+\}#', '([^/]+)', $routePath);
-            $pattern = "#^" . $pattern . "$#";
-            if (preg_match($pattern, $path, $routeMatches)) {
-                $callback = $routCallback['callback'];
-                $middleware = $routCallback['middleware'] ?? null;
-                $matches = $routeMatches;
-                break;
-            }
+    $path = $this->request->url();
+    $method = strtolower($this->request->method());
+    $callback = null;
+    $matches = [];
+    $middleware = null;
+
+    foreach ($this->routes[$method] ?? [] as $routePath => $routCallback) {
+        $pattern = preg_replace('#\{[^}]+\}#', '([^/]+)', $routePath);
+        $pattern = "#^" . $pattern . "$#";
+        if (preg_match($pattern, $path, $routeMatches)) {
+            $callback = $routCallback['callback'];
+            $middleware = $routCallback['middleware'] ?? null;
+            $matches = $routeMatches;
+            break;
         }
-        if (!$callback) {
-            throw new RouteNotFoundException("Not Found");
+    }
+
+    if (!$callback) {
+        throw new RouteNotFoundException("Not Found");
+    }
+
+    $runController = function () use ($callback, $matches) {
+        $class = $callback[0];
+        $methodClass = $callback[1];
+
+        $reflection = new ReflectionClass($class);
+        $instance = $reflection->newInstance();           
+
+        $reflectionMethod = $reflection->getMethod($methodClass);
+        $params = $reflectionMethod->getParameters();
+        $args = [];
+
+        $matchesIndex = 1;
+        foreach ($params as $param) {
+            if ($param->hasType() && !$param->getType()->isBuiltin() && $param->getType()->getName() === Request::class) {
+                $args[] = $this->request;
+            } elseif (isset($matches[$matchesIndex])) {
+                $args[] = $matches[$matchesIndex];
+                $matchesIndex++;
+            } elseif ($param->isOptional()) {
+                $args[] = $param->getDefaultValue();
+            } else {
+                throw new BadRequestException("Missing required parameter: " . $param->getName());
+            }
         }
 
-        if (isset($middleware) && $middleware !== null) {
-            $middleInstance = new $middleware;
-            $next = function ($request) use ($callback, $matches) {
-                $class = $callback[0];
-                $methodClass = $callback[1];
-                $reflection = new ReflectionClass($class);
-                $instance = $reflection->newInstance();
-                $reflectionMethod = $reflection->getMethod($methodClass);
-                $params = $reflectionMethod->getParameters();
-                $args = [];
-                $matchesIndex = 1;
-                foreach ($params as $param) {
-                    if ($param->hasType() && !$param->getType()->isBuiltin() && $param->getType()->getName() === Request::class) {
-                        $args[] = $this->request;
-                    } elseif (isset($matches[$matchesIndex])) {
-                        $args[] = $matches[$matchesIndex];
-                    } elseif ($param->isOptional()) {
-                        $args[] = $param->getDefaultValue();
-                    } else {
-                        throw new BadRequestException("Missing required parameter" . $param->getName());
-                    }
-                }
-                $output = $reflectionMethod->invokeArgs($instance, $args);
-                if (is_array($output)) {
-                    $view = new View;
-                    return $view->make($output);
-                } elseif (is_string($output)) {
-                    return $output;
-                } else {
-                    throw new InternalServerErrorException("Invalid response type", 500);
-                }
-            };
-            $result = $middleInstance->handle($this->request, $next);
-            if ($result !== null) {
-                return $result;
-            }
+        $output = $reflectionMethod->invokeArgs($instance, $args);
+
+        if (is_array($output)) {
+            $view = new View();
+            return $view->make($output);
+        } elseif (is_string($output)) {
+            return $output;
+        } else {
+            throw new InternalServerErrorException("Invalid response type", 500);
         }
+    };
+
+    if ($middleware !== null) {
+        $middleInstance = new $middleware();
+        $next = $runController;   // تابع کنترلر به عنوان next پاس داده میشه
+        return $middleInstance->handle($this->request, $next);
+    } else {
+        return $runController();
+    }
     }
 }
