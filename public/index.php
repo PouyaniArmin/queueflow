@@ -6,6 +6,7 @@ use App\Router;
 use Config\Env;
 use Controllers\AuthController;
 use Controllers\HomeController;
+use Middleware\AuthMiddleware;
 use Models\Database;
 
 require_once __DIR__."/../vendor/autoload.php";
@@ -15,7 +16,7 @@ Env::getInstance();
 Env::load(dirname(__DIR__));
 Database::getInstance();
 Database::ensureDefaultTables();
-$app->router->get('/',[HomeController::class,'index']);
+$app->router->get('/',[HomeController::class,'index'],AuthMiddleware::class);
 $app->router->get('/post/{id}',[HomeController::class,'test']);
 $app->router->get('/about/{id}',[HomeController::class,'new']);
 $app->router->get('/appointments',[HomeController::class,'query']);
