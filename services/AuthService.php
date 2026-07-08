@@ -2,6 +2,7 @@
 
 namespace Services;
 
+use App\Auth;
 use App\Request;
 use Models\User;
 
@@ -12,19 +13,23 @@ class AuthService
     {
         $this->user = new User;
     }
-    public function authenticate(string $email, string $password)
+    public function authenticate(string $email, string $password):bool
     {
+
         $user = $this->user->findByEmail($email);
+        
         if (!$user || empty($user)) {
-            return "Not found User Please create account";
+            return false;
         }
         $password_hash = $user[0]['password_hash'];
         
         if (password_verify($password, $password_hash)) {
-            return "user registered";
-        } else {
-            return "wrong Password";
-        }
+            Auth::login($user[0]);
+            return true;
+            
+        }  
+        return false;
+        
     }
     public function signup(Request $request)
     {
