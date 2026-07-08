@@ -10,7 +10,7 @@ use Middleware\AuthMiddleware;
 use Models\Database;
 
 require_once __DIR__."/../vendor/autoload.php";
-
+session_start();
 $app=new Application(dirname(__DIR__),new Router(new Request));
 Env::getInstance();
 Env::load(dirname(__DIR__));
