@@ -20,8 +20,13 @@ class AuthController extends Controller
     public function login(Request $request) {
        $request=$request->all();
         $auth=new AuthService();
-        return $auth->authenticate($request['email'],$request['password']);
-        
+        $ok=$auth->authenticate($request['email'],$request['password']);   
+        if ($ok) {
+            return "Your Welcome";
+            exit; 
+            }
+        return "email or password wrong please try again";
+
     }
     public function registerUser(Request $request)
     {
