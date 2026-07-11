@@ -22,8 +22,7 @@ class AuthController extends Controller
         $auth=new AuthService();
         $ok=$auth->authenticate($request['email'],$request['password']);   
         if ($ok) {
-            return "Your Welcome";
-            exit; 
+            return header('Location: /dashboard');
             }
         return "email or password wrong please try again";
 
