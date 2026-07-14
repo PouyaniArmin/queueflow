@@ -3,5 +3,5 @@ namespace Models;
 
 class Role extends Models{
     protected string $table='roles';
-    protected array $fillable=['neme','description'];
+    protected array $fillable=['name','description'];
 }
