@@ -7,6 +7,7 @@ use Config\Env;
 use Controllers\AuthController;
 use Controllers\DashboardController;
 use Controllers\HomeController;
+use Middleware\AdminMiddleware;
 use Middleware\AuthMiddleware;
 use Models\Database;
 
@@ -33,5 +34,5 @@ $app->router->post('/register',[AuthController::class,'registerUser']);
 
 // dashboard
 
-$app->router->get('/dashboard',[DashboardController::class,'index'],AuthMiddleware::class);
+$app->router->get('/dashboard',[DashboardController::class,'index'],AdminMiddleware::class);
 $app->run();
