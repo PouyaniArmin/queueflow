@@ -4,32 +4,32 @@ namespace Services;
 
 use App\Auth;
 use App\Request;
+use Models\Role;
 use Models\User;
 
 class AuthService
 {
     private ?User $user = null;
+    private ?Role $role = null;
     public function __construct()
     {
         $this->user = new User;
+        $this->role = new Role;
     }
-    public function authenticate(string $email, string $password):bool
+    public function authenticate(string $email, string $password): bool
     {
 
         $user = $this->user->findByEmail($email);
-        
         if (!$user || empty($user)) {
             return false;
         }
         $password_hash = $user[0]['password_hash'];
-        
+
         if (password_verify($password, $password_hash)) {
             Auth::login($user[0]);
             return true;
-            
-        }  
+        }
         return false;
-        
     }
     public function signup(Request $request)
     {
@@ -51,4 +51,28 @@ class AuthService
         return "Account Exists";
     }
 
+    private function getCurrentRoleName()
+    {
+        if (!Auth::check()) {
+            return null;
+        }
+        $user = Auth::user();
+        $role_id = $user['role_id'];
+        $role = $this->role->selectFindOneBy('id', $role_id);
+        if (empty($role) || !isset($role[0]['name'])) {
+            return null;
+        }
+        return $role[0]['name'];
+    }
+    public function isAdmin(){
+        return $this->getCurrentRoleName()==='admin';
+    }
+
+    public function isCustomer(){
+        return $this->getCurrentRoleName()==='customer';
+    }
+    public function isOwner(){
+        return $this->getCurrentRoleName()==='owner';
+    }
+    
 }
