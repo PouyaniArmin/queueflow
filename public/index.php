@@ -34,5 +34,5 @@ $app->router->post('/register',[AuthController::class,'registerUser']);
 
 // dashboard
 
-$app->router->get('/dashboard',[DashboardController::class,'index'],AdminMiddleware::class);
+$app->router->get('/dashboard',[DashboardController::class,'index'],AuthMiddleware::class);
 $app->run();
