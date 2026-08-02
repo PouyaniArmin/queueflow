@@ -1,8 +1,9 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
 <div class="container">
-    <h2 class="text-center mb-4">Dashboard Statistics</h2>
-
+    <div class="pt-4 text-center">
+        <h2 class="text-center mb-4">Dashboard Statistics</h2>
+    </div>
     <div class="row g-4">
         <!-- Today's Appointments -->
         <div class="col-xl-3 col-md-6">
@@ -128,4 +129,59 @@
             </div>
         </div>
     </div>
+    <!-- table -->
+    <div class="container mt-5 mb-5 pb-5"">
+        <h4 class="mb-3">Today's Appointments</h4>
+
+        <div class="appointments card shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 ">
+                        <thead class="table-light">
+                            <tr class="appointments-header">
+                                <th>Customer</th>
+                                <th>Service</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ali Rezaei</td>
+                                <td>Haircut</td>
+                                <td>10:00 AM</td>
+                                <td><span class="badge bg-warning text-dark">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sara Mohammadi</td>
+                                <td>Consultation</td>
+                                <td>11:30 AM</td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Reza Karimi</td>
+                                <td>Hair Color</td>
+                                <td>01:00 PM</td>
+                                <td><span class="badge bg-primary">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Neda Ahmadi</td>
+                                <td>Manicure</td>
+                                <td>03:15 PM</td>
+                                <td><span class="badge bg-warning text-dark">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>Hossein Jafari</td>
+                                <td>Beard Trim</td>
+                                <td>05:00 PM</td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- end table -->
 </div>

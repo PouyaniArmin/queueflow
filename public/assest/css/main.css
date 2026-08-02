@@ -107,4 +107,18 @@ stats-card {
 .stats-card:hover .chart-bar {
     background: rgba(255, 255, 255, .2);
 }
+/* table */
+.card {
+    border-radius: 5px;
+    overflow: hidden;
+}
+.table {
+    margin-bottom: 0;
+}
+
+table thead tr.appointments-header th {
+    background-color:#e2e8f0;
+    border-bottom: none;
+}
+
 /* end  dashboard */
