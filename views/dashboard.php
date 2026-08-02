@@ -184,4 +184,31 @@
     </div>
 
     <!-- end table -->
+     <!-- quick acess button -->
+      <div class="container mt-4 mb-5 pb-5">
+    <h4 class="mb-3">Quick Actions</h4>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <a href="#" class="btn btn-primary w-100 py-3">
+                <i class="bi bi-calendar-plus me-2"></i>
+                Add Appointment
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="#" class="btn btn-success w-100 py-3">
+                <i class="bi bi-briefcase me-2"></i>
+                Add Service
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="#" class="btn btn-info w-100 py-3 text-white">
+                <i class="bi bi-shop me-2"></i>
+                Add Business
+            </a>
+        </div>
+    </div>
+</div>
 </div>
