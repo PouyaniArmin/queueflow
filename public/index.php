@@ -5,6 +5,7 @@ use App\Request;
 use App\Router;
 use Config\Env;
 use Controllers\AuthController;
+use Controllers\BusinessController;
 use Controllers\DashboardController;
 use Controllers\HomeController;
 use Middleware\AdminMiddleware;
@@ -35,4 +36,5 @@ $app->router->post('/register',[AuthController::class,'registerUser']);
 // dashboard
 
 $app->router->get('/dashboard',[DashboardController::class,'index'],AuthMiddleware::class);
+$app->router->get('/dashboard-business',[BusinessController::class,'index'],AuthMiddleware::class);
 $app->run();

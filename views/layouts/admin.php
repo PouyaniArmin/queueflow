@@ -16,7 +16,7 @@
       <a class="navbar-brand" href="#">Dashboard</a>
       <div class="">
         <img src="images/noun-user-avatar-4035889.png" class="img-profile" alt="...">
-        <a href="">Logout</a>
+        <a href="" class="text-light">Logout</a>
       </div>
     </div>
   </nav>

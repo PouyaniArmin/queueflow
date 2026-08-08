@@ -122,3 +122,65 @@ table thead tr.appointments-header th {
 }
 
 /* end  dashboard */
+/*business*/
+.business-card {
+    border-radius: 16px;
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+.business-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+
+/* Business Icon */
+
+.business-icon {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #e9f2ff;
+    color: #0d6efd;
+
+    font-size: 1.4rem;
+}
+
+
+/* Statistics */
+
+.business-stats {
+    background-color: #f8f9fa;
+}
+
+
+/* Dropdown Button */
+
+.business-card .dropdown .btn {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+}
+
+.business-card .dropdown .btn:hover {
+    background-color: #e9ecef;
+}
+
+
+/* Create Business Button */
+
+#create-business {
+    scroll-margin-top: 80px;
+}
