@@ -8,6 +8,7 @@ use Controllers\AuthController;
 use Controllers\BusinessController;
 use Controllers\DashboardController;
 use Controllers\HomeController;
+use Controllers\ServiceController;
 use Middleware\AdminMiddleware;
 use Middleware\AuthMiddleware;
 use Models\Database;
@@ -37,4 +38,5 @@ $app->router->post('/register',[AuthController::class,'registerUser']);
 
 $app->router->get('/dashboard',[DashboardController::class,'index'],AuthMiddleware::class);
 $app->router->get('/dashboard-business',[BusinessController::class,'index'],AuthMiddleware::class);
+$app->router->get('/dashboard-service',[ServiceController::class,'index'],AuthMiddleware::class);
 $app->run();
