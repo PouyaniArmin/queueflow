@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use App\Auth;
 use App\Controller;
 use App\Request;
 use Models\User;
@@ -11,26 +12,28 @@ class AuthController extends Controller
 {
     public function index()
     {
+        if (Auth::check()) {
+            $this->redirectTo('dashboard');
+        }
         return $this->view('login');
     }
     public function register()
     {
         return $this->view('register');
     }
-    public function login(Request $request) {
-       $request=$request->all();
-        $auth=new AuthService();
-        $ok=$auth->authenticate($request['email'],$request['password']);   
+    public function login(Request $request)
+    {
+        $request = $request->all();
+        $auth = new AuthService();
+        $ok = $auth->authenticate($request['email'], $request['password']);
         if ($ok) {
-            return header('Location: /dashboard');
-            }
+            $this->redirectTo('dashboard');
+        }
         return "email or password wrong please try again";
-
     }
     public function registerUser(Request $request)
     {
-        $auth=new AuthService;
+        $auth = new AuthService;
         return $auth->signup($request);
-    
     }
 }

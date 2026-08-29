@@ -11,4 +11,8 @@ class Controller
     protected function withLayout(string $layout):void{
         $this->layout=$layout;
     }
+    protected function redirectTo(string $view){
+        header("Location:/".$view);
+        exit();
+    }
 }

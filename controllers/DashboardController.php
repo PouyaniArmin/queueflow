@@ -10,4 +10,8 @@ class DashboardController extends Controller
         $this->layout='admin';
         return $this->view("dashboard");
     }
+    public function logout(){
+        session_destroy();
+        $this->redirectTo('login');
+    }
 }

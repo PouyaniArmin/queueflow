@@ -23,7 +23,7 @@ Env::getInstance();
 Env::load(dirname(__DIR__));
 Database::getInstance();
 Database::ensureDefaultTables();
-$app->router->get('/',[HomeController::class,'index'],AuthMiddleware::class);
+$app->router->get('/',[HomeController::class,'index']);
 $app->router->get('/post/{id}',[HomeController::class,'test']);
 $app->router->get('/about/{id}',[HomeController::class,'new']);
 $app->router->get('/appointments',[HomeController::class,'query']);
@@ -45,4 +45,5 @@ $app->router->get('/dashboard-service',[ServiceController::class,'index'],AuthMi
 $app->router->get('/dashboard-appointment',[AppointmentController::class,'index'],AuthMiddleware::class);
 $app->router->get('/dashboard-customers',[CustomersController::class,'index'],AuthMiddleware::class);
 $app->router->get('/dashboard-settings',[SettingsController::class,'index'],AuthMiddleware::class);
+$app->router->get('/logout',[DashboardController::class,'logout']);
 $app->run();
