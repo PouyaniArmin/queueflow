@@ -1,6 +1,7 @@
 <?php
 namespace Controllers;
 
+use App\Auth;
 use App\Controller;
 use App\Request;
 
@@ -11,7 +12,7 @@ class DashboardController extends Controller
         return $this->view("dashboard");
     }
     public function logout(){
-        session_destroy();
+        Auth::logout();
         $this->redirectTo('login');
     }
 }

@@ -28,27 +28,27 @@
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
             <i class="bi bi-speedometer2"></i>
-            <a href="">Dashboard</a>
+            <a href="/dashboard">Dashboard</a>
           </li>
           <li class="list-group-item">
             <i class="bi bi-shop"></i>
-            <a href="">Businesses</a>
+            <a href="/dashboard-business">Businesses</a>
           </li>
           <li class="list-group-item">
             <i class="bi bi-briefcase"></i>
-            <a href="">Services</a>
+            <a href="/dashboard-service">Services</a>
           </li>
           <li class="list-group-item">
             <i class="bi bi-calendar-check"></i>
-            <a href="">Appointments</a>
+            <a href="/dashboard-appointment">Appointments</a>
           </li>
           <li class="list-group-item">
             <i class="bi bi-people"></i>
-            <a href="">Customers</a>
+            <a href="/dashboard-customers">Customers</a>
           </li>
           <li class="list-group-item">
             <i class="bi bi-gear"></i>
-            <a href="">Settings</a>
+            <a href="/dashboard-settings">Settings</a>
           </li>
 
           <li class="list-group-item">
