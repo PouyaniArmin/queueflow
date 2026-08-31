@@ -4,6 +4,7 @@
     <div class="pt-4 text-center">
         <h2 class="text-center mb-4">Dashboard Statistics</h2>
     </div>
+    <?php if($role==='owner'||$role==='admin'){?>
     <div class="row g-4">
         <!-- Today's Appointments -->
         <div class="col-xl-3 col-md-6">
@@ -211,4 +212,64 @@
         </div>
     </div>
 </div>
+    <?php }
+    else { ?>
+    <div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+
+            <!-- Icon -->
+            <div class="mb-4">
+                <i class="bi bi-shop display-1 text-primary"></i>
+            </div>
+
+            <!-- Title -->
+            <h2 class="fw-bold mb-3">You don't have a business yet</h2>
+
+            <!-- Description -->
+            <p class="text-muted mb-4 fs-5">
+                To start managing appointments, customers and services, you need to create a business first.
+            </p>
+
+            <!-- Main button -->
+            <a href="/dashboard-business/create" class="btn btn-primary btn-lg px-5 py-3 mb-5">
+                <i class="bi bi-plus-lg me-2"></i>
+                Create Business
+            </a>
+
+            <!-- Feature cards (optional) -->
+            <div class="row g-4 mt-2">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-calendar-check fs-2 text-primary mb-3"></i>
+                            <h5>Manage Appointments</h5>
+                            <p class="text-muted small mb-0">Easily manage your daily appointments</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-people fs-2 text-success mb-3"></i>
+                            <h5>Customers</h5>
+                            <p class="text-muted small mb-0">View your customers and their history</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-briefcase fs-2 text-warning mb-3"></i>
+                            <h5>Services</h5>
+                            <p class="text-muted small mb-0">Define and price your services</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <?php }?>
 </div>

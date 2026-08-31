@@ -74,5 +74,7 @@ class AuthService
     public function isOwner(){
         return $this->getCurrentRoleName()==='owner';
     }
-    
+    public function roleNmae():string{
+        return $this->getCurrentRoleName();
+    }
 }
