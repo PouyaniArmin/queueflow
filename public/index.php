@@ -41,6 +41,8 @@ $app->router->post('/register',[AuthController::class,'registerUser']);
 
 $app->router->get('/dashboard',[DashboardController::class,'index'],AuthMiddleware::class);
 $app->router->get('/dashboard-business',[BusinessController::class,'index'],AuthMiddleware::class);
+$app->router->get('/dashboard-business/create-business',[BusinessController::class,'create'],AuthMiddleware::class);
+$app->router->post('/dashboard-business/create-business',[BusinessController::class,'store'],AuthMiddleware::class);
 $app->router->get('/dashboard-service',[ServiceController::class,'index'],AuthMiddleware::class);
 $app->router->get('/dashboard-appointment',[AppointmentController::class,'index'],AuthMiddleware::class);
 $app->router->get('/dashboard-customers',[CustomersController::class,'index'],AuthMiddleware::class);

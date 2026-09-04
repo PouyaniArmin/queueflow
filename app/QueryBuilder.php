@@ -17,7 +17,7 @@ class QueryBuilder
     {
         $this->checkFillable();
         $query = "INSERT INTO {$this->table} ({$this->columnList()}) 
-                    VALUES ({$this->placeholder()})";
+                    VALUES ({$this->placeholder()}) RETURNING id";
         return $query;
     }
     protected function querySelectAll(): string

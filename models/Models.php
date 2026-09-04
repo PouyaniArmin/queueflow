@@ -35,6 +35,7 @@ abstract class Models extends QueryBuilder
             }
         }
         $stmt->execute();
+        return $stmt->fetchColumn();
     }
     public function select(): array
     {
@@ -45,7 +46,7 @@ abstract class Models extends QueryBuilder
         return $result;
     }
 
-    public function selectFindOneBy(string $key,string|int $valeu)
+    public function selectFindOneBy(string $key, string|int $valeu)
     {
         $query = $this->queryFindOneBY($key);
         $stmt = $this->conn->prepare($query);
@@ -63,7 +64,8 @@ abstract class Models extends QueryBuilder
             throw new Exception("Error No data for update");
         }
         $data = array_intersect_key($data, array_flip($this->fillable));
-        $query = $this->queryUpdate($data, $id);
+        // var_dump($data);
+        $query = $this->queryUpdate($data);
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         foreach ($data as $key => $valeu) {
@@ -75,6 +77,7 @@ abstract class Models extends QueryBuilder
             }
         }
         $stmt->execute();
+        return $stmt->rowCount();
     }
     public function delete($id)
     {
