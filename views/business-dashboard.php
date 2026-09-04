@@ -200,7 +200,7 @@
 <!-- Create New Business -->
 <div class="mt-5 pt-3">
 
-    <a href="#create-business"
+    <a href="/dashboard-business/create-business"
        class="btn btn-outline-primary btn-sm px-3">
 
         <i class="bi bi-plus-lg me-1"></i>
