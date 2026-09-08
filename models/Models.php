@@ -26,12 +26,15 @@ abstract class Models extends QueryBuilder
         $data = array_intersect_key($data, array_flip($this->fillable));
         $query = $this->queryInsert();
         $stmt = $this->conn->prepare($query);
-        foreach ($data as $key => $valeu) {
-            if (is_string($valeu)) {
-                $stmt->bindValue(":$key", $valeu, PDO::PARAM_STR);
-            }
-            if (is_int($valeu)) {
-                $stmt->bindValue(":$key", $valeu, PDO::PARAM_INT);
+        foreach ($data as $key => $value) {
+            if (is_bool($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
+            } elseif (is_int($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_INT);
+            } elseif (is_string($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
+            } else {
+                $stmt->bindValue(":$key", $value);
             }
         }
         $stmt->execute();
@@ -63,19 +66,26 @@ abstract class Models extends QueryBuilder
         if ($data === null || empty($data) || !isset($data)) {
             throw new Exception("Error No data for update");
         }
+
         $data = array_intersect_key($data, array_flip($this->fillable));
-        // var_dump($data);
+
         $query = $this->queryUpdate($data);
         $stmt = $this->conn->prepare($query);
+
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        foreach ($data as $key => $valeu) {
-            if (is_string($valeu)) {
-                $stmt->bindValue(":$key", $valeu, PDO::PARAM_STR);
-            }
-            if (is_int($valeu)) {
-                $stmt->bindValue(":$key", $valeu, PDO::PARAM_INT);
+
+        foreach ($data as $key => $value) {
+            if (is_bool($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
+            } elseif (is_int($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_INT);
+            } elseif (is_string($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
+            } else {
+                $stmt->bindValue(":$key", $value);
             }
         }
+
         $stmt->execute();
         return $stmt->rowCount();
     }
