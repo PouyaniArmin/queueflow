@@ -24,6 +24,7 @@ Env::load(dirname(__DIR__));
 Database::getInstance();
 Database::ensureDefaultTables();
 $app->router->get('/',[HomeController::class,'index']);
+$app->router->post('/schedule',[HomeController::class,'schedule']);
 $app->router->get('/post/{id}',[HomeController::class,'test']);
 $app->router->get('/about/{id}',[HomeController::class,'new']);
 $app->router->get('/appointments',[HomeController::class,'query']);
