@@ -4,27 +4,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bootstrap demo</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <title>Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="assest/css/main.css" rel="stylesheet">
 </head>
 
-<body class="overflow-hidden">
+<body>
+
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Dashboard</a>
-      <div class="">
+      <div class="d-flex align-items-center gap-2">
         <img src="images/noun-user-avatar-4035889.png" class="img-profile" alt="...">
         <a href="/logout" class="text-light">Logout</a>
       </div>
     </div>
   </nav>
 
+  <!-- Main Layout -->
   <div class="container-fluid">
-    <div class="row">
+    <div class="row" style="height: calc(100vh - 56px);">
 
-      <aside class="col-2 vh-100 overflow-auto border-end">
+      <!-- Sidebar -->
+      <aside class="col-2 border-end overflow-auto h-100 bg-white">
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
             <i class="bi bi-speedometer2"></i>
@@ -50,19 +55,24 @@
             <i class="bi bi-gear"></i>
             <a href="/dashboard-settings">Settings</a>
           </li>
-
           <li class="list-group-item">
             <i class="bi bi-box-arrow-right"></i>
             <a href="/logout">Logout</a>
           </li>
         </ul>
       </aside>
-      <main class="col overflow-auto vh-100">
+
+      <!-- Content -->
+      <main class="col overflow-auto h-100 p-4">
         {{content}}
       </main>
+
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>

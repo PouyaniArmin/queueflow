@@ -1,12 +1,21 @@
 <?php 
 namespace Controllers;
 
+use App\Auth;
 use App\Controller;
 use App\Request;
+use Models\Appointment;
 
 class AppointmentController extends Controller{
-    public function index(Request $request){
+    public function __construct()
+    {
         $this->layout='admin';
-        return $this->view('appointment-dashboard');
+    }
+    public function index(Request $request){
+        $auth=Auth::user();
+        $userId=$auth['id'];
+        $appointment=new Appointment();
+        $data=$appointment->forUser($userId);
+        return $this->view('appointment-dashboard',$data);
     }
 }
