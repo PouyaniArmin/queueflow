@@ -96,4 +96,12 @@ abstract class Models extends QueryBuilder
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
     }
+    public function filterByRelation(string $intermediary,string $mainColumn,string $intermediaryColumn,string $column,$value): array {
+        $query = $this->queryJoinHasMany($intermediary, $mainColumn, $intermediaryColumn, $column);
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':value', $value);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

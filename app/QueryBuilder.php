@@ -42,6 +42,15 @@ class QueryBuilder
         $query = "DELETE FROM {$this->table} WHERE id=:id";
         return $query;
     }
+
+    protected function queryJoinHasMany(string $intermediary,string $mainColumn,string $intermediaryColumn,string $column): string {
+        return "SELECT a.*
+            FROM {$this->table} AS a
+            JOIN {$intermediary} AS b 
+              ON b.{$intermediaryColumn} = a.{$mainColumn}
+            WHERE b.{$column} = :value";
+    }
+
     private function columnListUpdate(array $data)
     {
         $keys = array_keys($data);
