@@ -11,14 +11,18 @@ use Models\Service;
 
 class ServiceController extends Controller
 {
+
+    private ?Int $userId = null;
     public function __construct()
     {
         $this->layout = 'admin';
+        $auth = Auth::user();
+        $this->userId = $auth['id'];
     }
     public function index(Request $request)
     {
         $service = new Service;
-        $data = $service->select();
+        $data = $service->forUser($this->userId);
         return $this->view('service-dashboard', $data);
     }
     public function create(Request $request)
@@ -45,12 +49,13 @@ class ServiceController extends Controller
         $service = new Service();
         $data = $request->all();
         $result = [
-        'business_id'       => $data['business_id'],
-        'name'              => $data['name'],
-        'duration_minutes'  => $data['duration_minutes'],
-        'price'             => $data['price'] ?? 0,
-        'max_capacity'      => $data['max_capacity'] ?? 1,
-        'is_active'         => isset($data['is_active']) ? true : false,];
+            'business_id'       => $data['business_id'],
+            'name'              => $data['name'],
+            'duration_minutes'  => $data['duration_minutes'],
+            'price'             => $data['price'] ?? 0,
+            'max_capacity'      => $data['max_capacity'] ?? 1,
+            'is_active'         => isset($data['is_active']) ? true : false,
+        ];
         $service->insert($result);
         $this->redirectTo('dashboard-service');
     }
