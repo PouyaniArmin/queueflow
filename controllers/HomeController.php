@@ -9,11 +9,18 @@ use Models\Appointment;
 use Models\Business;
 use Models\Customers;
 use Models\Service;
+use Services\MailService;
 
 class HomeController extends Controller
 {
+    private ?MailService $mail=null;
+    public function __construct()
+    {
+        $this->mail=new MailService;
+    }
     public function index(Request $request)
     {
+
         $business = new Business;
         $service = new Service;
         $service_data = $service->select();
@@ -48,6 +55,7 @@ class HomeController extends Controller
         ];
         $appointments = new Appointment;
         $appointments->insert($appointment_data);
+        $this->mail->sendBookingEmail($formData['customer_email'],$formData['customer_name'], $date_time);
         return $this->redirectTo('');
     }
     public function test($id)
