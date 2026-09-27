@@ -49,6 +49,11 @@ $app->router->get('/dashboard-service/create',[ServiceController::class,'create'
 $app->router->post('/dashboard-service/store',[ServiceController::class,'store'],AuthMiddleware::class);
 
 $app->router->get('/dashboard-appointment',[AppointmentController::class,'index'],AuthMiddleware::class);
+$app->router->get('/dashboard-appointment/confirm/{id}',[AppointmentController::class,'confirmedAppointment'],AuthMiddleware::class);
+$app->router->get('/dashboard-appointment/cancel/{id}',[AppointmentController::class,'cancelledAppointment'],AuthMiddleware::class);
+$app->router->get('/dashboard-appointment/completed/{id}',[AppointmentController::class,'completedAppointment'],AuthMiddleware::class);
+
+
 $app->router->get('/dashboard-customers',[CustomersController::class,'index'],AuthMiddleware::class);
 $app->router->get('/dashboard-settings',[SettingsController::class,'index'],AuthMiddleware::class);
 $app->router->get('/logout',[DashboardController::class,'logout']);

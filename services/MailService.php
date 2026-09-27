@@ -70,4 +70,17 @@ class MailService
                 <p>Thank you.</p>';
         return $this->sendAppointmentEmail($to, $subject, $body);
     }
+    public function sendCancelEmail(string $to, string $customerName, string $dateTime): bool
+{
+    $subject = 'Your appointment has been cancelled';
+
+    $body = '
+            <p>Hello ' . htmlspecialchars($customerName) . ',</p>
+            <p>Your appointment has been cancelled.</p>
+            <p><strong>Date & time:</strong> ' . htmlspecialchars($dateTime) . '</p>
+            <p>If you have any questions, please contact us.</p>
+            <p>Thank you.</p>';
+
+    return $this->sendAppointmentEmail($to, $subject, $body);
+}
 }

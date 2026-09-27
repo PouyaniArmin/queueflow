@@ -188,11 +188,35 @@ foreach ($data as $item) {
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Edit</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="bi bi-check2-circle me-2"></i>Confirm</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="bi bi-x-circle me-2"></i>Cancel</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Delete</a></li>
+                                        <?php if ($status === 'pending'): ?>
+                                            <li>
+                                                <a class="dropdown-item text-success"
+                                                   href="/dashboard-appointment/confirm/<?= (int)$item['id'] ?>"
+                                                   onclick="return confirm('Confirm this appointment?')">
+                                                    <i class="bi bi-check2-circle me-2"></i>Confirm
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
+
+                                        <?php if ($status === 'confirmed'): ?>
+                                            <li>
+                                                <a class="dropdown-item text-info"
+                                                   href="/dashboard-appointment/completed/<?= (int)$item['id'] ?>"
+                                                   onclick="return confirm('Mark this appointment as completed?')">
+                                                    <i class="bi bi-check2-all me-2"></i>Complete
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
+
+                                        <?php if ($status === 'pending' || $status === 'confirmed'): ?>
+                                            <li>
+                                                <a class="dropdown-item text-danger"
+                                                   href="/dashboard-appointment/cancel/<?= (int)$item['id'] ?>"
+                                                   onclick="return confirm('Cancel this appointment?')">
+                                                    <i class="bi bi-x-circle me-2"></i>Cancel
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
                                     </ul>
                                 </div>
                             </div>
