@@ -3,11 +3,13 @@
 <?php
 function countByStatus(array $data, string $status): int
 {
-    return count(array_filter($data, fn($item) => $item['status'] === $status));
+    return count(array_filter($data, fn($item) => ($item['status'] ?? '') === $status));
 }
 
-// تعداد مشتری‌های یکتا بر اساس شماره تلفن
-$uniqueCustomers = count(array_unique(array_column($data, 'customer_phone')));
+$today = $today ?? [];
+$data = $data ?? [];
+$service = $service ?? [];
+$uniqueCustomers = $uniqueCustomers ?? 0;
 ?>
 
 <div class="container">
@@ -79,7 +81,7 @@ $uniqueCustomers = count(array_unique(array_column($data, 'customer_phone')));
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <div class="text-muted text-uppercase fw-bold small">Customers</div>
-                                <div class="stat-value text-info"><?= $uniqueCustomers ?></div>
+                                <div class="stat-value text-info"><?= (int)$uniqueCustomers ?></div>
                             </div>
                             <div class="icon-circle">
                                 <i class="bi bi-people-fill text-info"></i>
@@ -153,12 +155,12 @@ $uniqueCustomers = count(array_unique(array_column($data, 'customer_phone')));
                                 <?php else: ?>
                                     <?php foreach ($today as $appointment): ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($appointment['customer_name']) ?></td>
+                                            <td><?= htmlspecialchars($appointment['customer_name'] ?? '—') ?></td>
                                             <td>
                                                 <?php
                                                 $serviceName = '—';
                                                 foreach ($service as $s) {
-                                                    if ($s['id'] == $appointment['service_id']) {
+                                                    if ((int)$s['id'] === (int)$appointment['service_id']) {
                                                         $serviceName = $s['name'];
                                                         break;
                                                     }
@@ -169,7 +171,7 @@ $uniqueCustomers = count(array_unique(array_column($data, 'customer_phone')));
                                             <td><?= date('h:i A', strtotime($appointment['date_time'])) ?></td>
                                             <td>
                                                 <?php
-                                                $status = $appointment['status'];
+                                                $status = $appointment['status'] ?? 'pending';
                                                 $badgeClass = match ($status) {
                                                     'pending'   => 'bg-warning text-dark',
                                                     'confirmed' => 'bg-success',
@@ -235,7 +237,7 @@ $uniqueCustomers = count(array_unique(array_column($data, 'customer_phone')));
                         To start managing appointments, customers and services, you need to create a business first.
                     </p>
 
-                    <a href="/dashboard-business/create" class="btn btn-primary btn-lg px-5 py-3 mb-5">
+                    <a href="/dashboard-business/create-business" class="btn btn-primary btn-lg px-5 py-3 mb-5">
                         <i class="bi bi-plus-lg me-2"></i>
                         Create Business
                     </a>

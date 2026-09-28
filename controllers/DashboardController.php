@@ -20,15 +20,46 @@ class DashboardController extends Controller
         $user = Auth::user();
         $this->userId = $user['id'];
     }
+    // public function index(Request $request)
+    // {
+    //     $app = new Appointment;
+    //     $today = $app->todayForUser($this->userId);
+    //     $role = $this->authService->roleNmae();
+    //     $serviceModle=new Service;
+    //     $service=$serviceModle->forUser($this->userId);
+    //     $data=$app->forUser($this->userId);
+    //     return $this->view("dashboard", ['role' => $role, 'today' => $today,'data'=>$data,'service'=>$service]);
+    // }
     public function index(Request $request)
     {
         $app = new Appointment;
         $today = $app->todayForUser($this->userId);
         $role = $this->authService->roleNmae();
-        $serviceModle=new Service;
-        $service=$serviceModle->forUser($this->userId);
-        $data=$app->forUser($this->userId);
-        return $this->view("dashboard", ['role' => $role, 'today' => $today,'data'=>$data,'service'=>$service]);
+
+        $serviceModel = new Service;
+        $service = $serviceModel->forUser($this->userId);
+        $data = $app->forUser($this->userId);
+
+        $customerModel = new \Models\Customers();
+
+        foreach ($today as &$item) {
+            $customer = !empty($item['customer_id'])
+                ? $customerModel->selectFindOneBy('id', $item['customer_id'])
+                : false;
+            $item['customer_name'] = $customer[0]['name'] ?? '—';
+        }
+        unset($item);
+
+        $customers = $customerModel->forUser($this->userId);
+        $uniqueCustomers = count($customers);
+
+        return $this->view('dashboard', [
+            'role'            => $role,
+            'today'           => $today,
+            'data'            => $data,
+            'service'         => $service,
+            'uniqueCustomers' => $uniqueCustomers,
+        ]);
     }
     public function logout()
     {
