@@ -21,6 +21,7 @@ class QueueService
         $this->connect();
     }
 
+    // Establishes the RabbitMQ connection and creates a channel.
     private function connect(): void
     {
         try {
@@ -78,7 +79,7 @@ class QueueService
             $this->channel?->close();
             $this->connection?->close();
         } catch (Exception $e) {
-            // ignore close errors
+            // Ignore errors that occur while closing the connection.
         }
     }
 }

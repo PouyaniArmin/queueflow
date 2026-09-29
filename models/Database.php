@@ -12,22 +12,29 @@ class Database
 {
     private static $instance;
     private static ?PDO $conn;
+
     private function __construct() {}
+
     private function __clone()
     {
         throw new \Exception('Cloning of singleton Database is not allowed.');
     }
+
     private function __wakeup()
     {
         throw new \Exception('Unserializing singleton Database is not allowed.');
     }
+
     public static function getInstance()
     {
         if (!isset(self::$instance) || self::$instance === null) {
             self::$instance = new Database;
         }
+
         return self::$instance;
     }
+
+    // Creates and configures a reusable PostgreSQL connection.
     public static function connection(): ?PDO
     {
         $server = Env::getEnv('DB_HOST');
@@ -35,42 +42,55 @@ class Database
         $dbname = Env::getEnv('DB_DATABASE');
         $user = Env::getEnv('DB_USERNAME');
         $password = Env::getEnv('DB_PASSWORD');
+
         $dsn = "pgsql:host={$server};port={$port};dbname={$dbname};";
+
         if (!isset(self::$conn) || self::$conn === null) {
             try {
                 self::$conn = new PDO($dsn, $user, $password);
+
                 $option = [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_EMULATE_PREPARES => false,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
                 ];
+
                 foreach ($option as $attr => $value) {
                     self::$conn->setAttribute($attr, $value);
                 }
             } catch (PDOException $pe) {
-                throw new Exception("Exception Error Database class function connection : " . $pe->getMessage());
+                throw new Exception(
+                    "Exception Error Database class function connection : " . $pe->getMessage()
+                );
             }
         }
+
         return self::$conn;
     }
 
+    // Ensures the database connection exists before running migrations.
     public static function ensureDefaultTables()
     {
         self::connection();
+
         if (self::$conn === null) {
-            throw new Exception("Database connection not initialized. Call Database::connection() first.");
+            throw new Exception(
+                "Database connection not initialized. Call Database::connection() first."
+            );
         }
+
         self::migrations();
     }
+
+    // Executes all configured migration SQL statements.
     private static function migrations()
     {
-        $tables=MigrationConfig::tables();
-            if ($tables!==null || !empty($tables)) {
-            
-                foreach ($tables as $key => $value) {
-                        self::$conn->exec($value);
-                }
+        $tables = MigrationConfig::tables();
+
+        if ($tables !== null || !empty($tables)) {
+            foreach ($tables as $key => $value) {
+                self::$conn->exec($value);
+            }
         }
     }
-
 }

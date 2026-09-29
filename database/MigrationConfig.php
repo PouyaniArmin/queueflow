@@ -4,10 +4,9 @@ namespace Database;
 
 use Exception;
 
-use function PHPUnit\Framework\throwException;
-
 class MigrationConfig
 {
+    // Maps migration table names to their SQL migration files.
     private static function migrationsTable(): array
     {
         return [
@@ -20,10 +19,13 @@ class MigrationConfig
             'appointments'        => "migrations/001-create-appointments.sql",
         ];
     }
+
+    // Loads the SQL content of all configured migration files.
     public static function tables(): array
     {
         $migratines = self::migrationsTable();
         $data = [];
+
         foreach ($migratines as $name => $path) {
             if (file_exists(__DIR__ . "/$path")) {
                 $sql = file_get_contents(__DIR__ . "/$path");
@@ -32,6 +34,7 @@ class MigrationConfig
                 throw new Exception("Error Not Found sql file");
             }
         }
+
         return $data;
     }
 }

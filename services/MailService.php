@@ -14,6 +14,7 @@ class MailService
     private ?string $mailFromAddress = null;
     private ?string $mailFromName = null;
     private ?PHPMailer $mailer = null;
+
     public function __construct()
     {
         $this->mailHost = Env::getEnv('MAIL_HOST');
@@ -22,9 +23,12 @@ class MailService
         $this->mailPassword = Env::getEnv('MAIL_PASSWORD');
         $this->mailFromAddress = Env::getEnv('MAIL_FROM_ADDRESS');
         $this->mailFromName = Env::getEnv('MAIL_FROM_NAME');
+
         $this->mailer = new PHPMailer(true);
         $this->configure();
     }
+
+    // Configures PHPMailer to use the application's SMTP settings.
     private function configure()
     {
         $this->mailer->isSMTP();
@@ -38,8 +42,14 @@ class MailService
 
         $this->mailer->setFrom($this->mailFromAddress, $this->mailFromName);
     }
-    public function sendAppointmentEmail(string $to, string $subject, string $body, bool $isHtml = true): bool
-    {
+
+    // Sends an appointment-related email using the configured mailer.
+    public function sendAppointmentEmail(
+        string $to,
+        string $subject,
+        string $body,
+        bool $isHtml = true
+    ): bool {
         try {
             $this->mailer->clearAddresses();
             $this->mailer->clearAttachments();
@@ -68,8 +78,10 @@ class MailService
                 <p>Your appointment has been successfully booked.</p>
                 <p><strong>Date & time:</strong> ' . htmlspecialchars($dateTime) . '</p>
                 <p>Thank you.</p>';
+
         return $this->sendAppointmentEmail($to, $subject, $body);
     }
+
     public function sendCancelEmail(string $to, string $customerName, string $dateTime): bool
     {
         $subject = 'Your appointment has been cancelled';

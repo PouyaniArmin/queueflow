@@ -12,20 +12,24 @@ abstract class Models extends QueryBuilder
     protected string $table;
     protected array $fillable;
     private PDO $conn;
+
     public function __construct()
     {
         parent::__construct($this->table, $this->fillable);
         $this->conn = Database::connection();
     }
 
+    // Inserts only fillable fields and returns the generated record ID.
     public function insert($data)
     {
         if ($data === null || empty($data) || !isset($data)) {
             throw new Exception("Error No data for insert");
         }
+
         $data = array_intersect_key($data, array_flip($this->fillable));
         $query = $this->queryInsert();
         $stmt = $this->conn->prepare($query);
+
         foreach ($data as $key => $value) {
             if (is_bool($value)) {
                 $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
@@ -37,30 +41,39 @@ abstract class Models extends QueryBuilder
                 $stmt->bindValue(":$key", $value);
             }
         }
+
         $stmt->execute();
+
         return $stmt->fetchColumn();
     }
+
     public function select(): array
     {
         $query = $this->querySelectAll();
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         return $result;
     }
 
+    // Finds records by a specific column and returns false when no match is found.
     public function selectFindOneBy(string $key, string|int $valeu)
     {
         $query = $this->queryFindOneBY($key);
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":$key", $valeu, PDO::PARAM_STR);
         $stmt->execute();
+
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         if (!$result) {
             return false;
         }
+
         return $result;
     }
+
     public function update(array $data, $id)
     {
         if ($data === null || empty($data) || !isset($data)) {
@@ -87,8 +100,10 @@ abstract class Models extends QueryBuilder
         }
 
         $stmt->execute();
+
         return $stmt->rowCount();
     }
+
     public function delete($id)
     {
         $query = $this->queryDelete($id);
@@ -96,8 +111,22 @@ abstract class Models extends QueryBuilder
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
     }
-    public function filterByRelation(string $intermediary,string $mainColumn,string $intermediaryColumn,string $column,$value): array {
-        $query = $this->queryJoinHasMany($intermediary, $mainColumn, $intermediaryColumn, $column);
+
+    // Retrieves records related to the current model through an intermediary table.
+    public function filterByRelation(
+        string $intermediary,
+        string $mainColumn,
+        string $intermediaryColumn,
+        string $column,
+        $value
+    ): array {
+        $query = $this->queryJoinHasMany(
+            $intermediary,
+            $mainColumn,
+            $intermediaryColumn,
+            $column
+        );
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':value', $value);
         $stmt->execute();
