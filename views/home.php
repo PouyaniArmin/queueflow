@@ -130,7 +130,6 @@
     </div>
 </div>
 <script>
-    // سرویس‌ها رو از PHP به جاوااسکریپت می‌دیم
     const allServices = <?php echo json_encode($data['service']); ?>;
 
     const businessSelect = document.getElementById('business');
