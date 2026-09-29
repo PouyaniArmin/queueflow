@@ -4,7 +4,9 @@ namespace App;
 
 class Request
 {
-
+    /**
+     * Returns the current request path without the query string or trailing slash.
+     */
     public function url(): string
     {
         $path = $_SERVER['REQUEST_URI'];
@@ -13,33 +15,45 @@ class Request
         }
         return $path === '/' ? $path : rtrim($path, '/');
     }
+
     public function method(): string
     {
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * Returns the HTTP protocol version used by the request.
+     */
     public function getHttpVersion(): string
     {
         return $_SERVER['SERVER_PROTOCOL'];
     }
+
     public function getQueryString()
     {
         return $_SERVER['QUERY_STRING'];
     }
+
     public function getHost(): ?string
     {
         return $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
     }
+
     public function getContentType(): ?string
     {
         $headers = getallheaders();
         return $headers['Content-Type'] ?? null;
     }
+
+    /**
+     * Determines whether the request body contains JSON data.
+     */
     public function isJson()
     {
         $type = $this->getContentType();
         return (($type !== null) && str_contains(strtolower($type), 'application/json'));
     }
+
     public function getAccept(): ?string
     {
         $headers = getallheaders();
@@ -81,28 +95,41 @@ class Request
         $headers = getallheaders();
         return $headers['Connection'] ?? null;
     }
+
     public function getCacheControl(): ?string
     {
         $headers = getallheaders();
         return $headers['Cache-Control'] ?? null;
     }
+
     public function getDNT(): ?string
     {
         $headers = getallheaders();
         return $headers['DNT'] ?? null;
     }
 
+    /**
+     * Returns the value of a request header by name.
+     */
     public function getHeader(string $name): ?string
     {
         $headers = getallheaders();
         $name = str_replace(' ', '-', ucwords(str_replace('-', ' ', strtolower($name))));
         return $headers[$name] ?? null;
     }
+
+    /**
+     * Determines whether the request was made through XMLHttpRequest.
+     */
     public function isAjax()
     {
         $type = $this->getHeader('X-Requested-With');
         return (($type !== null) && str_contains(strtolower($type), 'xmlhttprequest'));
     }
+
+    /**
+     * Extracts the bearer token from the Authorization header.
+     */
     public function getBearerToken(): ?string
     {
         $auth = $this->getHeader('Authorization');
@@ -111,6 +138,7 @@ class Request
         }
         return trim(substr($auth, 7));
     }
+
     public function isGET(): bool
     {
         return $this->method() === 'get';
@@ -120,6 +148,10 @@ class Request
     {
         return $this->method() === 'post';
     }
+
+    /**
+     * Returns sanitized request data from GET, POST, or JSON input.
+     */
     public function all(): ?array
     {
         $data = [];
@@ -134,16 +166,23 @@ class Request
                 $data[$key] = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             }
         }
+
         if ($this->isJson()) {
             $raw = file_get_contents('php://input');
             $json = json_decode($raw, true);
+
             if (json_last_error() === JSON_ERROR_NONE && is_array($json)) {
                 foreach ($json as $key => $value)
                     $data[$key] = filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             }
         }
+
         return $data;
     }
+
+    /**
+     * Returns a specific request value by key.
+     */
     public function get(string $key)
     {
         $data = $this->all();
@@ -152,6 +191,10 @@ class Request
         }
         return null;
     }
+
+    /**
+     * Returns all successfully uploaded files from the current request.
+     */
     public function allFiles(): ?array
     {
         $files = [];
@@ -178,6 +221,10 @@ class Request
 
         return $files;
     }
+
+    /**
+     * Returns a specific successfully uploaded file by key.
+     */
     public function file(string $key): ?array
     {
         if (!isset($_FILES[$key])) {
@@ -190,6 +237,10 @@ class Request
 
         return $_FILES[$key];
     }
+
+    /**
+     * Determines whether a successfully uploaded file exists for the given key.
+     */
     public function hasFile(string $key): bool
     {
         return isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK;

@@ -8,15 +8,34 @@ use Exceptions\RouteNotFoundException;
 
 class Application
 {
+  /**
+   * The application's router instance.
+   */
   public Router $router;
-  public ?Application $app=null;
-  public static ?string $rootPath=null;
-  public function __construct(string $rootPath,Router $router)
+
+  /**
+   * Holds the current application instance.
+   */
+  public ?Application $app = null;
+
+  /**
+   * Stores the application's root path.
+   */
+  public static ?string $rootPath = null;
+
+  /**
+   * Initializes the application with its root path and router.
+   */
+  public function __construct(string $rootPath, Router $router)
   {
-    $this->app=$this;
-    self::$rootPath=$rootPath;
+    $this->app = $this;
+    self::$rootPath = $rootPath;
     $this->router = $router;
   }
+
+  /**
+   * Resolves the current route and handles application-level exceptions.
+   */
   public function run()
   {
     try {

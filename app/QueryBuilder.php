@@ -8,32 +8,40 @@ class QueryBuilder
 {
     private ?array $fillable;
     private ?string $table;
+
     public function __construct(string $table, array $fillable)
     {
         $this->table = $table;
         $this->fillable = $fillable;
     }
+
     protected function queryInsert(): string
     {
         $this->checkFillable();
+
         $query = "INSERT INTO {$this->table} ({$this->columnList()}) 
                     VALUES ({$this->placeholder()}) RETURNING id";
+
         return $query;
     }
+
     protected function querySelectAll(): string
     {
         $query = "SELECT * FROM {$this->table}";
         return $query;
     }
+
     protected function queryFindOneBY(string $param)
     {
         $query = "SELECT * FROM {$this->table} WHERE $param=:$param";
         return $query;
     }
+
     protected function queryUpdate(array $data): string
     {
         $keys = $this->columnListUpdate($data);
         $query = "UPDATE {$this->table} SET {$keys} WHERE id=:id";
+
         return $query;
     }
 
@@ -43,7 +51,13 @@ class QueryBuilder
         return $query;
     }
 
-    protected function queryJoinHasMany(string $intermediary,string $mainColumn,string $intermediaryColumn,string $column): string {
+    // Builds a query for retrieving records related through an intermediary table.
+    protected function queryJoinHasMany(
+        string $intermediary,
+        string $mainColumn,
+        string $intermediaryColumn,
+        string $column
+    ): string {
         return "SELECT a.*
             FROM {$this->table} AS a
             JOIN {$intermediary} AS b 
@@ -55,19 +69,25 @@ class QueryBuilder
     {
         $keys = array_keys($data);
         $result = '';
+
         foreach ($keys as $col) {
             $result .= $col . "=:" . $col . ',';
         }
+
         return substr($result, 0, -1);
     }
+
     private function columnList(): string
     {
         return implode(",", $this->fillable);
     }
+
     private function placeholder(): string
     {
         return ":" . implode(",:", $this->fillable);
     }
+
+    // Ensures that the model has fields available for INSERT queries.
     private function checkFillable()
     {
         if (!isset($this->fillable) || $this->fillable === null || empty($this->fillable)) {
