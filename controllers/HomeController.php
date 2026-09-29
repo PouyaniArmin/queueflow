@@ -77,23 +77,4 @@ class HomeController extends Controller
 
         return $this->redirectTo('');
     }
-
-    public function test($id)
-    {
-        return $id;
-    }
-
-    public function new(Request $request, $id)
-    {
-        return "id: $id";
-    }
-
-    public function query(Request $request)
-    {
-        $data = $request->getQueryString('data');
-
-        var_dump($data);
-
-        return "Test";
-    }
 }
